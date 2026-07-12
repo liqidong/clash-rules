@@ -1,0 +1,5 @@
+payload:
+  # ModelScope China and documented regional object/container endpoints
+  - DOMAIN-SUFFIX,modelscope.cn
+  - DOMAIN,modelscope.oss-cn-beijing.aliyuncs.com
+  - DOMAIN,registry.cn-beijing.aliyuncs.com

@@ -1,0 +1,46 @@
+payload:
+  # Hugging Face Xet and legacy LFS content
+  - DOMAIN-SUFFIX,xethub.hf.co
+  - DOMAIN,cas-server.hf.co
+  - DOMAIN,cdn-lfs.huggingface.co
+  - DOMAIN,cdn-lfs-us-1.huggingface.co
+  - DOMAIN,cdn-lfs.hf.co
+  - DOMAIN,cdn-lfs-us-1.hf.co
+
+  # GitHub releases, source archives, LFS, and container content
+  - DOMAIN,release-assets.githubusercontent.com
+  - DOMAIN,objects.githubusercontent.com
+  - DOMAIN,objects-origin.githubusercontent.com
+  - DOMAIN,codeload.github.com
+  - DOMAIN,github-releases.githubusercontent.com
+  - DOMAIN,github-registry-files.githubusercontent.com
+  - DOMAIN,github-cloud.githubusercontent.com
+  - DOMAIN,github-cloud.s3.amazonaws.com
+  - DOMAIN,ghcr.io
+  - DOMAIN,pkg-containers.githubusercontent.com
+
+  # Python packages and PyTorch wheels
+  - DOMAIN,files.pythonhosted.org
+  - DOMAIN,download.pytorch.org
+
+  # Docker image manifests and layers
+  - DOMAIN,registry-1.docker.io
+  - DOMAIN,production.cloudfront.docker.com
+
+  # Kaggle API, models, datasets, and Google Storage payloads
+  - DOMAIN,www.kaggle.com
+  - DOMAIN,api.kaggle.com
+  - DOMAIN-SUFFIX,kaggleusercontent.com
+  - DOMAIN,storage.googleapis.com
+
+  # Conda and Anaconda package content
+  - DOMAIN,repo.anaconda.com
+  - DOMAIN,conda.anaconda.org
+  - DOMAIN,conda-static.anaconda.org
+  - DOMAIN,binstar-cio-packages-prod.s3.amazonaws.com
+
+  # Civitai serves model download entrypoints on the main service domain
+  - DOMAIN-SUFFIX,civitai.com
+
+  # ModelScope international service
+  - DOMAIN-SUFFIX,modelscope.ai
