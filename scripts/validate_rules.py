@@ -11,6 +11,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RULE_FILES = (
+    ROOT / "rules/ai-reality.yaml",
+    ROOT / "rules/streaming-hy2.yaml",
     ROOT / "rules/download-proxy.yaml",
     ROOT / "rules/download-direct.yaml",
 )
@@ -23,19 +25,45 @@ UUID_RE = re.compile(
     r"[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\b"
 )
 SECRET_MARKERS = (
+    "server:",
+    "uuid:",
     "password:",
     "private-key:",
     "private_key:",
+    "public-key:",
+    "public_key:",
     "authorization:",
     "bearer ",
     "BEGIN PRIVATE KEY",
 )
-APPROVED_SUFFIXES = {
-    "civitai.com",
-    "kaggleusercontent.com",
-    "modelscope.ai",
-    "modelscope.cn",
-    "xethub.hf.co",
+APPROVED_SUFFIXES_BY_FILE = {
+    "ai-reality.yaml": {
+        "openai.com",
+        "chatgpt.com",
+        "oaistatic.com",
+        "oaiusercontent.com",
+        "anthropic.com",
+        "claude.ai",
+        "generativelanguage.googleapis.com",
+    },
+    "streaming-hy2.yaml": {
+        "youtube.com",
+        "googlevideo.com",
+        "ytimg.com",
+        "netflix.com",
+        "nflxvideo.net",
+        "nflximg.net",
+        "nflxso.net",
+    },
+    "download-proxy.yaml": {
+        "civitai.com",
+        "kaggleusercontent.com",
+        "modelscope.ai",
+        "xethub.hf.co",
+    },
+    "download-direct.yaml": {
+        "modelscope.cn",
+    },
 }
 
 
@@ -91,8 +119,12 @@ def validate_file(path: Path) -> list[tuple[str, str]]:
             )
         rule_type, domain = match.groups()
         validate_domain(path, line_number, domain)
-        if rule_type == "DOMAIN-SUFFIX" and domain not in APPROVED_SUFFIXES:
-            fail(f"{path}:{line_number}: suffix is not explicitly approved: {domain}")
+        approved_suffixes = APPROVED_SUFFIXES_BY_FILE.get(path.name, set())
+        if rule_type == "DOMAIN-SUFFIX" and domain not in approved_suffixes:
+            fail(
+                f"{path}:{line_number}: suffix is not explicitly approved for "
+                f"{path.name}: {domain}"
+            )
         entries.append((rule_type, domain))
 
     if not saw_payload or not entries:
@@ -102,18 +134,31 @@ def validate_file(path: Path) -> list[tuple[str, str]]:
     return entries
 
 
-def main() -> int:
-    seen: dict[tuple[str, str], Path] = {}
+def validate_files(paths: tuple[Path, ...] | list[Path]) -> int:
+    seen: dict[str, tuple[str, Path]] = {}
     total = 0
+    for path in paths:
+        entries = validate_file(path)
+        for rule_type, domain in entries:
+            if domain in seen:
+                previous_type, previous_path = seen[domain]
+                fail(
+                    f"duplicate domain in {previous_path} and {path}: "
+                    f"{previous_type}/{rule_type},{domain}"
+                )
+            seen[domain] = (rule_type, path)
+        total += len(entries)
+    return total
+
+
+def main() -> int:
     try:
+        total = validate_files(list(RULE_FILES))
         for path in RULE_FILES:
-            entries = validate_file(path)
-            for entry in entries:
-                if entry in seen:
-                    fail(f"duplicate rule in {seen[entry]} and {path}: {entry[0]},{entry[1]}")
-                seen[entry] = path
-            total += len(entries)
-            print(f"validated {path.relative_to(ROOT)}: {len(entries)} rules")
+            print(
+                f"validated {path.relative_to(ROOT)}: "
+                f"{len(validate_file(path))} rules"
+            )
     except (UnicodeDecodeError, ValueError) as exc:
         print(f"validation failed: {exc}", file=sys.stderr)
         return 1

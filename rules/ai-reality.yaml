@@ -1,0 +1,14 @@
+payload:
+  # Core OpenAI and ChatGPT destinations
+  - DOMAIN-SUFFIX,openai.com
+  - DOMAIN-SUFFIX,chatgpt.com
+  - DOMAIN-SUFFIX,oaistatic.com
+  - DOMAIN-SUFFIX,oaiusercontent.com
+
+  # Core Anthropic and Claude destinations
+  - DOMAIN-SUFFIX,anthropic.com
+  - DOMAIN-SUFFIX,claude.ai
+
+  # Gemini web and API entrypoints. Do not broaden this to googleapis.com.
+  - DOMAIN,gemini.google.com
+  - DOMAIN-SUFFIX,generativelanguage.googleapis.com
