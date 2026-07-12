@@ -6,6 +6,7 @@ payload:
   - DOMAIN,cdn-lfs-us-1.huggingface.co
   - DOMAIN,cdn-lfs.hf.co
   - DOMAIN,cdn-lfs-us-1.hf.co
+  - DOMAIN,us.aws.cdn.hf.co
 
   # GitHub releases, source archives, LFS, and container content
   - DOMAIN,release-assets.githubusercontent.com

@@ -56,6 +56,10 @@ class ValidateRulesTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "end with a newline"):
             self.validate_text("payload:\n  - DOMAIN,download.example.com")
 
+    def test_production_rules_cover_observed_hugging_face_cdn(self) -> None:
+        entries = VALIDATOR.validate_file(ROOT / "rules/download-proxy.yaml")
+        self.assertIn(("DOMAIN", "us.aws.cdn.hf.co"), entries)
+
 
 if __name__ == "__main__":
     unittest.main()

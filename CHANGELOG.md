@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route Hugging Face downloads redirected through `us.aws.cdn.hf.co` to the
+  dedicated download group.
 - Add PyTorch's current R2 wheel content host, observed from the official CPU
   wheel index during canary validation.
 
