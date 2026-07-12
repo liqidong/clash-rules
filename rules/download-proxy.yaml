@@ -22,6 +22,7 @@ payload:
   # Python packages and PyTorch wheels
   - DOMAIN,files.pythonhosted.org
   - DOMAIN,download.pytorch.org
+  - DOMAIN,download-r2.pytorch.org
 
   # Docker image manifests and layers
   - DOMAIN,registry-1.docker.io

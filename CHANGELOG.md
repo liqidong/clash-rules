@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add PyTorch's current R2 wheel content host, observed from the official CPU
+  wheel index during canary validation.
+
 ## 2026-07-12
 
 - Add initial overseas download rules for model hubs, code releases, Python
