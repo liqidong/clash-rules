@@ -30,16 +30,12 @@ SECRET_MARKERS = (
     "bearer ",
     "BEGIN PRIVATE KEY",
 )
-FORBIDDEN_SUFFIXES = {
-    "akamaihd.net",
-    "aliyuncs.com",
-    "amazonaws.com",
-    "cloudfront.net",
-    "docker.io",
-    "googleapis.com",
-    "githubusercontent.com",
-    "hf.co",
-    "huggingface.co",
+APPROVED_SUFFIXES = {
+    "civitai.com",
+    "kaggleusercontent.com",
+    "modelscope.ai",
+    "modelscope.cn",
+    "xethub.hf.co",
 }
 
 
@@ -95,8 +91,8 @@ def validate_file(path: Path) -> list[tuple[str, str]]:
             )
         rule_type, domain = match.groups()
         validate_domain(path, line_number, domain)
-        if rule_type == "DOMAIN-SUFFIX" and domain in FORBIDDEN_SUFFIXES:
-            fail(f"{path}:{line_number}: over-broad shared suffix is forbidden: {domain}")
+        if rule_type == "DOMAIN-SUFFIX" and domain not in APPROVED_SUFFIXES:
+            fail(f"{path}:{line_number}: suffix is not explicitly approved: {domain}")
         entries.append((rule_type, domain))
 
     if not saw_payload or not entries:

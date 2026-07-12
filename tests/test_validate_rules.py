@@ -26,13 +26,13 @@ class ValidateRulesTest(unittest.TestCase):
         entries = self.validate_text(
             "payload:\n"
             "  - DOMAIN,download.example.com\n"
-            "  - DOMAIN-SUFFIX,models.example.org\n"
+            "  - DOMAIN-SUFFIX,xethub.hf.co\n"
         )
         self.assertEqual(
             entries,
             [
                 ("DOMAIN", "download.example.com"),
-                ("DOMAIN-SUFFIX", "models.example.org"),
+                ("DOMAIN-SUFFIX", "xethub.hf.co"),
             ],
         )
 
@@ -40,9 +40,13 @@ class ValidateRulesTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "only canonical DOMAIN"):
             self.validate_text("payload:\n  - DOMAIN-KEYWORD,download\n")
 
-    def test_rejects_over_broad_shared_suffix(self) -> None:
-        with self.assertRaisesRegex(ValueError, "over-broad shared suffix"):
+    def test_rejects_unapproved_shared_suffix(self) -> None:
+        with self.assertRaisesRegex(ValueError, "suffix is not explicitly approved"):
             self.validate_text("payload:\n  - DOMAIN-SUFFIX,googleapis.com\n")
+
+    def test_rejects_broad_service_suffix(self) -> None:
+        with self.assertRaisesRegex(ValueError, "suffix is not explicitly approved"):
+            self.validate_text("payload:\n  - DOMAIN-SUFFIX,github.com\n")
 
     def test_rejects_secret_markers(self) -> None:
         with self.assertRaisesRegex(ValueError, "possible secret material"):
